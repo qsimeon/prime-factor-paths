@@ -169,8 +169,8 @@ def print_trajectory_info(traj: PrimeTrajectory, name: str = "Trajectory"):
     axis_names = [prime_to_axis_name(p) for p in generate_primes(100)[:traj.dimension]]
     print(f"Axes: {', '.join([f'{name}={prime}' for name, prime in zip(axis_names, generate_primes(100)[:traj.dimension])])}")
     
-    # Get encoding
-    encoding = traj.get_trajectory_encoding()
+    # Get encoding (list of individual step factorizations)
+    encoding = traj.factorizations
     print(f"\nTrajectory encoding (first 10 steps):")
     for i, enc in enumerate(encoding[:10]):
         factors = prime_factorization(enc)
@@ -298,7 +298,7 @@ def demonstrate_serialization():
     original_traj = create_trajectory_from_points(points)
     
     # Serialize
-    encoding = original_traj.get_trajectory_encoding()
+    encoding = original_traj.factorizations
     serialized = trajectory_to_string(encoding)
     print(f"\nOriginal trajectory steps: {original_traj.get_step_count()}")
     print(f"Serialized length: {len(serialized)} characters")
@@ -329,7 +329,7 @@ def demonstrate_high_dimensional():
         print(f"Prime mapping: {get_prime_mapping(dim)}")
         
         # Show first few encodings
-        encoding = traj.get_trajectory_encoding()
+        encoding = traj.factorizations
         print(f"First 3 step encodings:")
         for i, enc in enumerate(encoding[:3]):
             factors = prime_factorization(enc)
